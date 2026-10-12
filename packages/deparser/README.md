@@ -69,27 +69,29 @@ console.log(deparse(stmt));
 // Output: SELECT * FROM another_table
 ```
 
-### Latest Version (PostgreSQL 17)
+### Latest Version (PostgreSQL 18)
 
 ```sh
 npm install pgsql-deparser
 ```
 
-### Version-Specific Packages (PostgreSQL 13-16)
+### Version-Specific Packages (PostgreSQL 13-17)
 
-While we highly recommend using PG17, for PostgreSQL versions 13-16, use the version-specific packages:
+We recommend PG18. PG17 remains fully supported; for PostgreSQL versions 13-17, use the version-specific packages:
 
 ```sh
 npm install pgsql-deparser@pg13  # PostgreSQL 13
 npm install pgsql-deparser@pg14  # PostgreSQL 14
 npm install pgsql-deparser@pg15  # PostgreSQL 15
 npm install pgsql-deparser@pg16  # PostgreSQL 16
+npm install pgsql-deparser@pg17  # PostgreSQL 17
 ```
 
 **Version Status:**
-- **PG17**: 🚀 Recommended (stable + modern AST)
-- **PG14-16**: ⚠️ Experimental (modern AST, hardening in progress)
-- **PG13**: Stable (legacy AST format)
+- **PG18**: 🚀 Recommended (stable + modern AST)
+- **PG17**: Stable (modern AST)
+- **PG14-16**: Legacy (modern AST, not actively developed)
+- **PG13**: Legacy (legacy AST format)
 
 ## Options
 

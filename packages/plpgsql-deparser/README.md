@@ -14,7 +14,7 @@
 
 PL/pgSQL AST Deparser - Converts PL/pgSQL function ASTs back to SQL strings.
 
-> **⚠️ Experimental:** This package is currently experimental. If you're looking for SQL deparsing (not PL/pgSQL), see [`pgsql-deparser`](https://www.npmjs.com/package/pgsql-deparser).
+> **Looking for SQL deparsing (not PL/pgSQL)?** See [`pgsql-deparser`](https://www.npmjs.com/package/pgsql-deparser).
 
 > **For full SQL + PL/pgSQL deparsing:** If you need to deparse complete `CREATE FUNCTION` statements (not just function bodies), use [`plpgsql-parser`](https://www.npmjs.com/package/plpgsql-parser) instead. It handles the full heterogeneous parsing/deparsing pipeline automatically.
 

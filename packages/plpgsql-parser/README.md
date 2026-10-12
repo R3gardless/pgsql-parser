@@ -14,7 +14,7 @@
 
 Combined SQL + PL/pgSQL parser with hydrated ASTs and transform API.
 
-> **⚠️ Experimental:** This package is currently experimental. If you're looking for just SQL parsing, see [`pgsql-parser`](https://www.npmjs.com/package/pgsql-parser). For body-only PL/pgSQL deparsing, see [`plpgsql-deparser`](https://www.npmjs.com/package/plpgsql-deparser).
+> **Related packages:** For SQL-only parsing, see [`pgsql-parser`](https://www.npmjs.com/package/pgsql-parser). For body-only PL/pgSQL deparsing, see [`plpgsql-deparser`](https://www.npmjs.com/package/plpgsql-deparser).
 
 ## Overview
 

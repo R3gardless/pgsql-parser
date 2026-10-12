@@ -1,6 +1,6 @@
 # Direct Transformers for PostgreSQL AST
 
-Direct transformers provide optimized, tree-shakeable modules for transforming PostgreSQL ASTs directly from one version to PG17.
+Direct transformers provide optimized, tree-shakeable modules for transforming PostgreSQL ASTs directly from one version to PG18 (the latest) or PG17.
 
 ## Features
 
@@ -14,21 +14,21 @@ Direct transformers provide optimized, tree-shakeable modules for transforming P
 ### Transform a Complete Parse Result
 
 ```typescript
-import { PG15ToPG17Transformer } from '@pgsql/transform-ast/transformers-direct/v15-to-v17';
+import { PG15ToPG18Transformer } from '@pgsql/transform-ast/transformers-direct/v15-to-v18';
 import { Parser } from '@pgsql/parser';
 
 const parser = new Parser({ version: 15 });
 const pg15Ast = await parser.parse('SELECT * FROM users');
 
-const transformer = new PG15ToPG17Transformer();
-const pg17Ast = transformer.transform(pg15Ast);
-// pg17Ast is typed as V17Types.ParseResult
+const transformer = new PG15ToPG18Transformer();
+const pg18Ast = transformer.transform(pg15Ast);
+// pg18Ast is typed as PG18.ParseResult
 ```
 
 ### Transform Any Node in the AST
 
 ```typescript
-import { PG15ToPG17Transformer } from '@pgsql/transform-ast/transformers-direct/v15-to-v17';
+import { PG15ToPG18Transformer } from '@pgsql/transform-ast/transformers-direct/v15-to-v18';
 
 // Transform just a statement node
 const stmtNode = pg15Ast.stmts[0].stmt;
@@ -45,6 +45,11 @@ const transformedWhere = transformer.transform(whereClause);
 
 | Transformer | Import Path | Dependencies |
 |------------|-------------|--------------|
+| PG17→PG18 | `@pgsql/transform-ast/transformers-direct/v17-to-v18` | v17→v18 only |
+| PG16→PG18 | `@pgsql/transform-ast/transformers-direct/v16-to-v18` | v16→v17, v17→v18 |
+| PG15→PG18 | `@pgsql/transform-ast/transformers-direct/v15-to-v18` | v15→v16, v16→v17, v17→v18 |
+| PG14→PG18 | `@pgsql/transform-ast/transformers-direct/v14-to-v18` | v14→v15, v15→v16, v16→v17, v17→v18 |
+| PG13→PG18 | `@pgsql/transform-ast/transformers-direct/v13-to-v18` | All transformers |
 | PG16→PG17 | `@pgsql/transform-ast/transformers-direct/v16-to-v17` | v16→v17 only |
 | PG15→PG17 | `@pgsql/transform-ast/transformers-direct/v15-to-v17` | v15→v16, v16→v17 |
 | PG14→PG17 | `@pgsql/transform-ast/transformers-direct/v14-to-v17` | v14→v15, v15→v16, v16→v17 |
@@ -54,17 +59,17 @@ const transformedWhere = transformer.transform(whereClause);
 
 ### `transform(node)`
 
-Transforms a node from the source PostgreSQL version to PG17.
+Transforms a node from the source PostgreSQL version to the transformer's target version (PG18 or PG17).
 
 **Overloads:**
-- `transform(node: VXXTypes.Node): V17Types.Node` - Transform any node type
-- `transform(node: VXXTypes.ParseResult): V17Types.ParseResult` - Transform a parse result
+- `transform(node: VXXTypes.Node): VYYTypes.Node` - Transform any node type
+- `transform(node: VXXTypes.ParseResult): VYYTypes.ParseResult` - Transform a parse result
 
 **Parameters:**
 - `node` - The node or parse result to transform
 
 **Returns:**
-- The transformed node or parse result in PG17 format
+- The transformed node or parse result in the target version's format
 
 ### `transformStatement(stmt)` (Deprecated)
 
@@ -76,11 +81,11 @@ Import types directly from the version-specific type modules:
 
 ```typescript
 import * as PG15 from '@pgsql/transform-ast/15/types';
-import * as PG17 from '@pgsql/transform-ast/17/types';
+import * as PG18 from '@pgsql/transform-ast/18/types';
 
 // Use types for type annotations
 const node: PG15.Node = ...;
-const result: PG17.ParseResult = ...;
+const result: PG18.ParseResult = ...;
 ```
 
 ## Examples
@@ -100,8 +105,8 @@ const complexSQL = `
 const pg14Parser = new Parser({ version: 14 });
 const pg14Ast = await pg14Parser.parse(complexSQL);
 
-const transformer = new PG14ToPG17Transformer();
-const pg17Ast = transformer.transform(pg14Ast);
+const transformer = new PG14ToPG18Transformer();
+const pg18Ast = transformer.transform(pg14Ast);
 ```
 
 ### Transforming Specific Nodes

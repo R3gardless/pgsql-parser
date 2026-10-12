@@ -18,17 +18,17 @@
 
 The transform package enables you to:
 
-- **Transform legacy ASTs**: Convert ASTs from PostgreSQL versions 13-16 to version 17
+- **Transform legacy ASTs**: Convert ASTs from PostgreSQL versions 13-17 to version 18 (or 13-16 to 17)
 - **Build unified deparsers**: Create a single deparser pipeline that works with multiple PostgreSQL versions
 - **Maintain backward compatibility**: Support legacy codebases while leveraging the latest PostgreSQL features
 
 ## Key Limitation
 
-This package only supports ASTs derived from SQL that is parseable by PostgreSQL 17. This means:
+This package only supports ASTs derived from SQL that is parseable by the target version's parser (PostgreSQL 18 for the latest). This means:
 
-- ✅ **Supported**: SQL from PG13-16 that remains valid in PG17
+- ✅ **Supported**: SQL from PG13-17 that remains valid in PG18
 - ❌ **Not supported**: Deprecated syntax from older versions that was removed
-- ❌ **Not supported**: SQL that cannot be parsed by the PG17 parser
+- ❌ **Not supported**: SQL that cannot be parsed by the PG18 parser
 
 This design ensures all transformed ASTs can be reliably deparsed using the latest PostgreSQL grammar.
 
@@ -47,14 +47,14 @@ import { ASTTransformer } from '@pgsql/transform-ast';
 
 const transformer = new ASTTransformer();
 
-// Transform any version to PG17
-const pg17Ast = transformer.transformToLatest(pg13Ast, 13);
+// Transform any version to the latest (PG18)
+const pg18Ast = transformer.transformToLatest(pg13Ast, 13);
 
 // Transform between specific versions
 const pg15Ast = transformer.transform(pg13Ast, 13, 15);
 
 // Convenience methods
-const result = transformer.transform13To17(pg13Ast);
+const result = transformer.transform13To18(pg13Ast);
 ```
 
 ### Direct Transformers
@@ -62,10 +62,10 @@ const result = transformer.transform13To17(pg13Ast);
 For better performance when you know source and target versions:
 
 ```typescript
-import { PG13ToPG17Transformer } from '@pgsql/transform-ast';
+import { PG13ToPG18Transformer } from '@pgsql/transform-ast';
 
-const transformer = new PG13ToPG17Transformer();
-const pg17Ast = transformer.transform(pg13Ast);
+const transformer = new PG13ToPG18Transformer();
+const pg18Ast = transformer.transform(pg13Ast);
 ```
 
 ### Integration Example
@@ -73,26 +73,26 @@ const pg17Ast = transformer.transform(pg13Ast);
 ```typescript
 import { parse } from '@pgsql/parser';
 import { deparse } from 'pgsql-deparser';
-import { PG13ToPG17Transformer } from '@pgsql/transform-ast';
+import { PG13ToPG18Transformer } from '@pgsql/transform-ast';
 
 // Parse with older version
 const pg13Ast = await parse('SELECT * FROM users', { version: 13 });
 
 // Transform to latest
-const transformer = new PG13ToPG17Transformer();
-const pg17Ast = transformer.transform(pg13Ast);
+const transformer = new PG13ToPG18Transformer();
+const pg18Ast = transformer.transform(pg13Ast);
 
 // Deparse with latest grammar
-const sql = await deparse(pg17Ast);
+const sql = await deparse(pg18Ast);
 ```
 
 ## 🔄 Transformation Chain
 
-**Incremental**: PG13 → PG14 → PG15 → PG16 → PG17
+**Incremental**: PG13 → PG14 → PG15 → PG16 → PG17 → PG18
 - Step-by-step version upgrades
 - Useful for debugging transformation issues
 
-**Direct**: PG13 → PG17, PG14 → PG17, etc.
+**Direct**: PG13 → PG18, PG14 → PG18, etc. (PG17 targets also available)
 - Single-step transformations
 - Optimized for performance
 
@@ -100,10 +100,11 @@ const sql = await deparse(pg17Ast);
 
 | From | To | Transformer |
 |------|----|-----------| 
-| PG13 | PG14, PG15, PG16, PG17 | `V13ToV14Transformer`, `PG13ToPG17Transformer` |
-| PG14 | PG15, PG16, PG17 | `V14ToV15Transformer`, `PG14ToPG17Transformer` |
-| PG15 | PG16, PG17 | `V15ToV16Transformer`, `PG15ToPG17Transformer` |
-| PG16 | PG17 | `V16ToV17Transformer`, `PG16ToPG17Transformer` |
+| PG13 | PG14, PG15, PG16, PG17, PG18 | `V13ToV14Transformer`, `PG13ToPG17Transformer`, `PG13ToPG18Transformer` |
+| PG14 | PG15, PG16, PG17, PG18 | `V14ToV15Transformer`, `PG14ToPG17Transformer`, `PG14ToPG18Transformer` |
+| PG15 | PG16, PG17, PG18 | `V15ToV16Transformer`, `PG15ToPG17Transformer`, `PG15ToPG18Transformer` |
+| PG16 | PG17, PG18 | `V16ToV17Transformer`, `PG16ToPG17Transformer`, `PG16ToPG18Transformer` |
+| PG17 | PG18 | `V17ToV18Transformer`, `PG17ToPG18Transformer` |
 
 ## 🏗️ Architecture
 

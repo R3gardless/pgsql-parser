@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [18.3.12](https://github.com/constructive-io/pgsql-parser/compare/pgsql-deparser%4018.3.11...pgsql-deparser%4018.3.12) (2026-10-13)
+
+### Bug Fixes
+
+- **deparser:** keep empty bit strings, collision-free dollar tags and case-sensitive option strings valid ([e5373c5](https://github.com/constructive-io/pgsql-parser/commit/e5373c59a0dec0343a3cc6cce04b8625bd983fcd))
+
 ## [18.3.11](https://github.com/constructive-io/pgsql-parser/compare/pgsql-deparser%4018.3.10...pgsql-deparser%4018.3.11) (2026-10-12)
 
 **Note:** Version bump only for package pgsql-deparser
